@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: identity-service
+
+management:
+  # Micrometer  configuration 
+  tracing:
+    sampling:
+      probability: 1.0 # only for testing purpose, switch back to 0.1 for production code
+    propagation:
+      type: b3
+  # Zipkin  configuration 
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+      
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]' # Add ServiceName, TraceId and SpanId to logs
+          
+server:
+  port: 8090
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
